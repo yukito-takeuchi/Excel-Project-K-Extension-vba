@@ -1,3 +1,17 @@
+Attribute VB_Name = "CSV_Import"
+Option Explicit
+
+' ============================================================
+'  CSV Auto Import Macro
+'  Target file: 0全科目月次ﾃﾞｰﾀ出力.xlsm
+'  Function: Auto paste FreeWay CSV to target sheets
+'
+'  Sheet mapping:
+'    (1) Current CSV (tax-excl) -> Sheets(4): 602全科目月次ﾃﾞｰﾀ出力（当期のみ）
+'    (2) Tax CSV (tax-incl)     -> Sheets(6): 税込ﾃﾞｰﾀ専用
+'    (3) 3year CSV              -> Sheets(1): 602全科目月次ﾃﾞｰﾀ出力（三期分）
+' ============================================================
+
 Sub CSV_Import()
     Dim p As String
     Dim ans As Integer
@@ -6,10 +20,10 @@ Sub CSV_Import()
     Application.ScreenUpdating = False
     Application.DisplayAlerts = False
 
-    ' 最初に3つのシートを全部クリア
-    wb.Sheets(4).Cells.ClearContents  ' 当期
-    wb.Sheets(6).Cells.ClearContents  ' 税込
-    wb.Sheets(1).Cells.ClearContents  ' 三期分
+    ' Clear all 3 sheets first
+    wb.Sheets(4).Cells.ClearContents
+    wb.Sheets(6).Cells.ClearContents
+    wb.Sheets(1).Cells.ClearContents
 
     ' (1) Current CSV (required)
     p = Application.GetOpenFilename("CSV,*.csv", , "(1) Select CSV")
