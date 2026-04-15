@@ -9,17 +9,17 @@
 FreeWay（会計ソフト）のCSV → 複数Excelファイルへ自動取り込み＋財務グラフ自動生成のデモUI実装。
 
 **最重要制約：`*.xlsm` / `*.xlsx` の既存Excelファイルは一切変更しない。**
-**編集対象：`../demo/index.html` のみ（VBAマクロは実装完了済み・触らない）**
+**編集対象：`demo/index.html` のみ（VBAマクロは実装完了済み・触らない）**
 
 ## ファイル構成
 ```
-/vba/
+vba/                 ← git管理ルート（ここ）
 ├ CLAUDE.md          ← 本ファイル（タスク管理の唯一の正）
 ├ docs/要件整理.md   ← 要件定義書
 ├ CSV_Import.bas     ← 英語版（参考のみ・編集不要）
-└ CSV自動取込.bas    ← 実装完了（307行）。編集不要
-/demo/
-└ index.html         ← 編集対象（現在764行）
+├ CSV自動取込.bas    ← 実装完了（307行）。編集不要
+└ demo/
+  └ index.html       ← 編集対象（現在764行）
 ```
 
 ## demo/index.html の現状
