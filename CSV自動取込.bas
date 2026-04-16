@@ -17,7 +17,7 @@ Private Const MODE_税込 As String = "税込"
 ' ============================================================
 ' メインマクロ：CSV自動取込
 ' ============================================================
-Sub CSV_Import()
+Sub CSV取込()
 
     Dim wb          As Workbook
     Dim taxMode     As String
@@ -48,7 +48,7 @@ Sub CSV_Import()
 
     ' 税込CSV（税抜モードのみ対象。税込モードでは数式連動のため不要）
     If taxMode = MODE_税抜 Then
-        ans = MsgBox("② 税込CSVを取り込みますか？" & Chr(13) & _
+        ans = MsgBox("② 税込CSVを取り込みますか？" & vbCrLf & _
                      "（「いいえ」でスキップ。既存データは保持されます）", _
                      vbYesNo + vbQuestion, "② 税込CSV の取り込み確認")
         doTaxIn = (ans = vbYes)
@@ -58,7 +58,7 @@ Sub CSV_Import()
     End If
 
     ' 三期分CSV
-    ans = MsgBox("③ 三期分CSVを取り込みますか？" & Chr(13) & _
+    ans = MsgBox("③ 三期分CSVを取り込みますか？" & vbCrLf & _
                  "（「いいえ」でスキップ。既存データは保持されます）", _
                  vbYesNo + vbQuestion, "③ 三期分CSV の取り込み確認")
     doThreeYear = (ans = vbYes)
@@ -66,11 +66,11 @@ Sub CSV_Import()
     ' ----------------------------------------------------------
     ' STEP 2：実行前確認ダイアログ
     ' ----------------------------------------------------------
-    msg = "以下のシートの既存データをクリアして取り込みを開始します。よろしいですか？" & Chr(13) & Chr(13)
-    msg = msg & "・消費税方式：" & taxMode & Chr(13)
-    msg = msg & "・① 当期CSV → シート(" & IDX_当期 & ")" & Chr(13)
-    If doTaxIn Then      msg = msg & "・② 税込CSV → シート(" & IDX_税込 & ")" & Chr(13)
-    If doThreeYear Then  msg = msg & "・③ 三期分CSV → シート(" & IDX_三期分 & ")" & Chr(13)
+    msg = "以下のシートの既存データをクリアして取り込みを開始します。よろしいですか？" & vbCrLf & vbCrLf
+    msg = msg & "・消費税方式：" & taxMode & vbCrLf
+    msg = msg & "・① 当期CSV → シート(" & IDX_当期 & ")" & vbCrLf
+    If doTaxIn Then      msg = msg & "・② 税込CSV → シート(" & IDX_税込 & ")" & vbCrLf
+    If doThreeYear Then  msg = msg & "・③ 三期分CSV → シート(" & IDX_三期分 & ")" & vbCrLf
 
     ans = MsgBox(msg, vbYesNo + vbQuestion, "実行確認")
     If ans = vbNo Then Exit Sub
@@ -111,7 +111,7 @@ Sub CSV_Import()
     If csvPath = "False" Then
         ' キャンセル → スキップして続行するか確認
         Application.ScreenUpdating = True   ' ダイアログ表示のため一時的に再開
-        ans = MsgBox("① 当期CSVの選択がキャンセルされました。" & Chr(13) & _
+        ans = MsgBox("① 当期CSVの選択がキャンセルされました。" & vbCrLf & _
                      "スキップして残りの処理を続けますか？（「いいえ」で中止）", _
                      vbYesNo + vbExclamation, "確認")
         Application.ScreenUpdating = False
@@ -166,11 +166,11 @@ Sub CSV_Import()
     ' ----------------------------------------------------------
     ' STEP 8：完了メッセージ（取り込み行数を表示）
     ' ----------------------------------------------------------
-    msg = "取り込みが完了しました！" & Chr(13) & Chr(13)
-    msg = msg & "消費税方式：" & taxMode & Chr(13)
-    If rows1 > 0 Then msg = msg & "① 当期CSV：" & rows1 & " 行 取り込み完了" & Chr(13)
-    If rows2 > 0 Then msg = msg & "② 税込CSV：" & rows2 & " 行 取り込み完了" & Chr(13)
-    If rows3 > 0 Then msg = msg & "③ 三期分CSV：" & rows3 & " 行 取り込み完了" & Chr(13)
+    msg = "取り込みが完了しました！" & vbCrLf & vbCrLf
+    msg = msg & "消費税方式：" & taxMode & vbCrLf
+    If rows1 > 0 Then msg = msg & "① 当期CSV：" & rows1 & " 行 取り込み完了" & vbCrLf
+    If rows2 > 0 Then msg = msg & "② 税込CSV：" & rows2 & " 行 取り込み完了" & vbCrLf
+    If rows3 > 0 Then msg = msg & "③ 三期分CSV：" & rows3 & " 行 取り込み完了" & vbCrLf
 
     MsgBox msg, vbInformation, "完了"
     GoTo Cleanup
@@ -179,9 +179,10 @@ Sub CSV_Import()
     ' エラーハンドラ：予期せぬエラーをキャッチし、状態を必ず復元する
     ' ----------------------------------------------------------
 ErrHandler:
-    MsgBox "予期せぬエラーが発生しました。処理を中止します。" & Chr(13) & Chr(13) & _
-           "エラー番号：" & Err.Number & Chr(13) & _
+    MsgBox "予期せぬエラーが発生しました。処理を中止します。" & vbCrLf & vbCrLf & _
+           "エラー番号：" & Err.Number & vbCrLf & _
            "内容：" & Err.Description, vbCritical, "エラー"
+    GoTo Cleanup
 
 Cleanup:
     ' Application の状態を必ず復元する（エラー時も保証）
@@ -200,8 +201,8 @@ Private Function 消費税方式を選択() As String
 
     Dim ans As Integer
 
-    ans = MsgBox("消費税方式を選択してください。" & Chr(13) & Chr(13) & _
-                 "【はい】→ 税抜方式（当期CSV + 税込CSV を別々に取り込む）" & Chr(13) & _
+    ans = MsgBox("消費税方式を選択してください。" & vbCrLf & vbCrLf & _
+                 "【はい】→ 税抜方式（当期CSV + 税込CSV を別々に取り込む）" & vbCrLf & _
                  "【いいえ】→ 税込方式（当期CSVのみ。税込列は数式で自動連動）", _
                  vbYesNoCancel + vbQuestion, "消費税方式の選択")
 
@@ -238,7 +239,7 @@ Private Function CSVを貼付(csvPath As String, wb As Workbook, sheetIdx As Int
         rowCount = .Rows.Count
         If rowCount <= 1 And Trim(csvWb.Sheets(1).Cells(1, 1).Value) = "" Then
             csvWb.Close False
-            MsgBox "選択されたCSVファイルにデータがありません。スキップします。" & Chr(13) & _
+            MsgBox "選択されたCSVファイルにデータがありません。スキップします。" & vbCrLf & _
                    "ファイル：" & csvPath, vbExclamation
             CSVを貼付 = 0
             Exit Function
@@ -262,16 +263,16 @@ PasteError:
     ' エラー種別に応じてメッセージを分岐
     ' 1004 は Excel 汎用エラー。文字コード問題（Shift-JIS 以外）でも発生しやすいため案内を追加
     If Err.Number = 1004 Then
-        MsgBox "CSVファイルの読み込みに失敗しました（エラー 1004）。" & Chr(13) & Chr(13) & _
-               "選択されたCSVファイルの文字コードがShift-JIS以外の可能性があります。" & Chr(13) & Chr(13) & _
-               "対処方法：" & Chr(13) & _
-               "1. Excelでそのファイルを開く（文字コードをUTF-8で指定）" & Chr(13) & _
-               "2. 別名保存でCSVを保存し直す" & Chr(13) & _
+        MsgBox "CSVファイルの読み込みに失敗しました（エラー 1004）。" & vbCrLf & vbCrLf & _
+               "選択されたCSVファイルの文字コードがShift-JIS以外の可能性があります。" & vbCrLf & vbCrLf & _
+               "対処方法：" & vbCrLf & _
+               "1. Excelでそのファイルを開く（文字コードをUTF-8で指定）" & vbCrLf & _
+               "2. 別名保存でCSVを保存し直す" & vbCrLf & _
                "3. 再度このマクロを実行してください", _
                vbExclamation, "読み込みエラー（文字コードの可能性あり）"
     Else
-        MsgBox "CSVファイルの読み込み中にエラーが発生しました。" & Chr(13) & Chr(13) & _
-               "エラー番号：" & Err.Number & Chr(13) & _
+        MsgBox "CSVファイルの読み込み中にエラーが発生しました。" & vbCrLf & vbCrLf & _
+               "エラー番号：" & Err.Number & vbCrLf & _
                "内容：" & Err.Description, _
                vbCritical, "読み込みエラー"
     End If
@@ -295,8 +296,8 @@ Private Function シート存在確認(wb As Workbook, idx As Integer) As Boolea
     If ws Is Nothing Then
         ' Application状態を一時的に復元してダイアログを表示
         Application.ScreenUpdating = True
-        MsgBox "シート(" & idx & ")が見つかりません。" & Chr(13) & Chr(13) & _
-               "シート名が変更されていないか確認してください。" & Chr(13) & _
+        MsgBox "シート(" & idx & ")が見つかりません。" & vbCrLf & vbCrLf & _
+               "シート名が変更されていないか確認してください。" & vbCrLf & _
                "処理を中止します。", vbCritical, "シートエラー"
         Application.ScreenUpdating = False
         シート存在確認 = False
