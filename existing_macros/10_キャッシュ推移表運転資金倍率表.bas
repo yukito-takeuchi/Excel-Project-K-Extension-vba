@@ -9,7 +9,7 @@ Sub 手入力削除()
     Range("G217").Select
     ActiveCell.FormulaR1C1 = "0"
     Range("G218").Select
-   
+
     Columns("G:G").Select
     Range("G199").Activate
     Selection.SpecialCells(xlCellTypeConstants, 23).Select
@@ -192,21 +192,6 @@ End Sub
 
 
 
-何も選択されていません
-
-コンテンツへ
-Gmail でのスクリーン リーダーの使用
-
-5 / 446
-10
-受信トレイ
-
-yukito <iyggf66974n2@gmail.com>
-4月16日(木) 23:21 (1 時間前)
-To 自分
-
-Option Explicit
-
 Sub 年間まとめて手入力削除()
 '
 ' 年間まとめて手入力削除 Macro
@@ -255,6 +240,7 @@ Sub 年間まとめて手入力削除()
     Range("B28").Select
     Application.CutCopyMode = False
 End Sub
+
 Sub Macro2()
 '
 ' Macro2 Macro
@@ -266,7 +252,3 @@ Sub Macro2()
     ActiveCell.FormulaR1C1 = "0"
     Range("G218").Select
 End Sub
-
-
-
-

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>黒永様案件 ガントチャート</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Meiryo','Yu Gothic',sans-serif; font-size:12px; background:#f5f5f5; color:#222; }
+.page { max-width:1100px; margin:24px auto; background:white; border:1px solid #ccc; box-shadow:0 2px 12px rgba(0,0,0,.1); padding:24px 32px; }
+h1 { font-size:18px; color:#1f4e79; border-bottom:2px solid #1f4e79; padding-bottom:8px; margin-bottom:4px; }
+.subtitle { color:#666; font-size:11px; margin-bottom:20px; }
+.deadline { background:#fce4d6; border:1px solid #c00; border-radius:4px; padding:6px 12px; display:inline-block; margin-bottom:20px; color:#c00; font-weight:bold; }
+
+/* ===== ガントチャート ===== */
+.gantt { width:100%; border-collapse:collapse; }
+.gantt th, .gantt td { border:1px solid #ddd; padding:4px 8px; font-size:11px; }
+.gantt thead th { background:#1f4e79; color:white; text-align:center; white-space:nowrap; font-weight:normal; }
+.gantt thead th.today { background:#c00; }
+.gantt thead th.deadline { background:#7b3f00; }
+.gantt .task-name { background:#f5f8ff; font-weight:bold; min-width:220px; white-space:nowrap; }
+.gantt .task-name.section { background:#1f4e79; color:white; font-size:10px; letter-spacing:1px; }
+.gantt .owner { text-align:center; color:#555; white-space:nowrap; min-width:60px; }
+.gantt .prio { text-align:center; min-width:50px; }
+
+/* バー */
+.bar { height:14px; border-radius:3px; }
+.bar-done { background:#70ad47; }
+.bar-win  { background:#4472c4; }
+.bar-test { background:#ed7d31; }
+.bar-opt  { background:#a5a5a5; }
+.bar-buf  { background:#ffe699; border:1px solid #ffc000; }
+.bar-dlv  { background:#c00; }
+
+/* ステータスバッジ */
+.badge { display:inline-block; padding:1px 7px; border-radius:10px; font-size:10px; }
+.done  { background:#70ad47; color:white; }
+.doing { background:#ed7d31; color:white; }
+.wait  { background:#bbb;    color:white; }
+.must  { background:#c00;    color:white; }
+.opt   { background:#888;    color:white; }
+
+/* 凡例 */
+.legend { display:flex; gap:16px; flex-wrap:wrap; margin:16px 0 8px; }
+.leg { display:flex; align-items:center; gap:5px; font-size:11px; }
+.leg-box { width:16px; height:12px; border-radius:2px; }
+
+/* コスト表 */
+.cost-table { width:100%; border-collapse:collapse; margin-top:16px; }
+.cost-table th, .cost-table td { border:1px solid #ddd; padding:5px 10px; font-size:11px; }
+.cost-table th { background:#1f4e79; color:white; font-weight:normal; }
+.cost-table .total-row td { background:#fce4d6; font-weight:bold; }
+
+/* リスク表 */
+.risk-table { width:100%; border-collapse:collapse; margin-top:16px; }
+.risk-table th, .risk-table td { border:1px solid #ddd; padding:5px 10px; font-size:11px; }
+.risk-table th { background:#7b3f00; color:white; font-weight:normal; }
+.risk-table .high { color:#c00; font-weight:bold; }
+.risk-table .mid  { color:#ed7d31; }
+
+h2 { font-size:13px; color:#1f4e79; margin:20px 0 8px; border-left:3px solid #1f4e79; padding-left:8px; }
+
+@media print {
+  body { background:white; }
+  .page { box-shadow:none; border:none; margin:0; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>黒永様案件 ガントチャート</h1>
+<div class="subtitle">FreeWay CSV自動取込システム開発　作成日：2026-04-17</div>
+<div class="deadline">🚨 納品期限：2026年4月27日（日）　残り10日</div>
+
+<!-- 凡例 -->
+<div class="legend">
+  <div class="leg"><div class="leg-box" style="background:#70ad47"></div> 完了</div>
+  <div class="leg"><div class="leg-box" style="background:#4472c4"></div> Windows作業</div>
+  <div class="leg"><div class="leg-box" style="background:#ed7d31"></div> テスト・修正</div>
+  <div class="leg"><div class="leg-box" style="background:#a5a5a5"></div> オプション</div>
+  <div class="leg"><div class="leg-box" style="background:#ffe699;border:1px solid #ffc000"></div> バッファ</div>
+  <div class="leg"><div class="leg-box" style="background:#c00"></div> 納品</div>
+</div>
+
+<!-- ガントチャート -->
+<table class="gantt">
+<thead>
+<tr>
+  <th style="min-width:220px">タスク</th>
+  <th>担当</th>
+  <th>優先</th>
+  <th>所要</th>
+  <th>状態</th>
+  <!-- 日付ヘッダー 4/17〜4/27 -->
+  <th class="today">17<br>木</th>
+  <th>18<br>金</th>
+  <th>19<br>土</th>
+  <th>20<br>日</th>
+  <th>21<br>月</th>
+  <th>22<br>火</th>
+  <th>23<br>水</th>
+  <th>24<br>木</th>
+  <th>25<br>金</th>
+  <th>26<br>土</th>
+  <th class="deadline">27<br>日</th>
+</tr>
+</thead>
+<tbody>
+
+<!-- セクション：Mac作業 -->
+<tr>
+  <td class="task-name section" colspan="16">■ MAC SIDE（実装・分析）</td>
+</tr>
+<tr>
+  <td class="task-name">VBAマクロ実装<br><small style="color:#888">CSV自動取込.bas 307行</small></td>
+  <td class="owner">Mac</td>
+  <td class="prio"><span class="badge must">MUST</span></td>
+  <td style="text-align:center">完了</td>
+  <td style="text-align:center"><span class="badge done">完了</span></td>
+  <td style="background:#e8f5e9"></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+<tr>
+  <td class="task-name">デモUI実装<br><small style="color:#888">demo/index.html 1260行</small></td>
+  <td class="owner">Mac</td>
+  <td class="prio"><span class="badge must">MUST</span></td>
+  <td style="text-align:center">完了</td>
+  <td style="text-align:center"><span class="badge done">完了</span></td>
+  <td style="background:#e8f5e9"></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+<tr>
+  <td class="task-name">既存マクロ解析（全8ファイル）</td>
+  <td class="owner">Mac</td>
+  <td class="prio"><span class="badge must">MUST</span></td>
+  <td style="text-align:center">完了</td>
+  <td style="text-align:center"><span class="badge done">完了</span></td>
+  <td style="background:#e8f5e9"></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+<tr>
+  <td class="task-name">ロードマップ・ガントチャート作成</td>
+  <td class="owner">Mac</td>
+  <td class="prio"><span class="badge must">MUST</span></td>
+  <td style="text-align:center">1時間</td>
+  <td style="text-align:center"><span class="badge done">完了</span></td>
+  <td><div class="bar bar-done" style="width:90%"></div></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+
+<!-- セクション：Windows作業 -->
+<tr>
+  <td class="task-name section" colspan="16">■ WINDOWS SIDE（実機作業）</td>
+</tr>
+<tr>
+  <td class="task-name">W-1: VBAを0番ファイルにインポート<br><small style="color:#888">Alt+F11 → ファイルインポート</small></td>
+  <td class="owner">Win</td>
+  <td class="prio"><span class="badge must">MUST</span></td>
+  <td style="text-align:center">1〜2h</td>
+  <td style="text-align:center"><span class="badge wait">未</span></td>
+  <td></td>
+  <td><div class="bar bar-win" style="width:90%"></div></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+<tr>
+  <td class="task-name">W-2: ボタン設置（必須入力シート）<br><small style="color:#888">フォームコントロール → CSV取込マクロ割当</small></td>
+  <td class="owner">Win</td>
+  <td class="prio"><span class="badge must">MUST</span></td>
+  <td style="text-align:center">30分</td>
+  <td style="text-align:center"><span class="badge wait">未</span></td>
+  <td></td>
+  <td><div class="bar bar-win" style="width:90%"></div></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+<tr>
+  <td class="task-name">T-1: シートインデックス確認<br><small style="color:#888">Sheet(1)(4)(6)が正しいか</small></td>
+  <td class="owner">Win</td>
+  <td class="prio"><span class="badge must">MUST</span></td>
+  <td style="text-align:center">15分</td>
+  <td style="text-align:center"><span class="badge wait">未</span></td>
+  <td></td>
+  <td><div class="bar bar-win" style="width:60%"></div></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+
+<!-- セクション：テスト -->
+<tr>
+  <td class="task-name section" colspan="16">■ TEST（動作確認）</td>
+</tr>
+<tr>
+  <td class="task-name">T-2: 動作テスト（7シナリオ）<br><small style="color:#888">税抜/税込・スキップ・キャンセル等</small></td>
+  <td class="owner">Win</td>
+  <td class="prio"><span class="badge must">MUST</span></td>
+  <td style="text-align:center">1〜2h</td>
+  <td style="text-align:center"><span class="badge wait">未</span></td>
+  <td></td>
+  <td></td>
+  <td><div class="bar bar-test" style="width:90%"></div></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+<tr>
+  <td class="task-name">T-3: FreeWay CSV文字コード確認<br><small style="color:#888">Shift-JIS → OK / UTF-8 → A-10要対応</small></td>
+  <td class="owner">Win</td>
+  <td class="prio"><span class="badge must">MUST</span></td>
+  <td style="text-align:center">15分</td>
+  <td style="text-align:center"><span class="badge wait">未</span></td>
+  <td></td>
+  <td></td>
+  <td><div class="bar bar-test" style="width:40%"></div></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+<tr>
+  <td class="task-name" style="background:#fffde7">バッファ：テスト不具合修正</td>
+  <td class="owner">Win</td>
+  <td class="prio"><span class="badge opt">BUF</span></td>
+  <td style="text-align:center">〜1日</td>
+  <td style="text-align:center"><span class="badge wait">予備</span></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td><div class="bar bar-buf" style="width:90%"></div></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+
+<!-- セクション：ドキュメント -->
+<tr>
+  <td class="task-name section" colspan="16">■ DOCUMENTATION（納品準備）</td>
+</tr>
+<tr>
+  <td class="task-name">M-1: 操作マニュアル作成<br><small style="color:#888">手順書・エラー対処法・月次フロー</small></td>
+  <td class="owner">Mac</td>
+  <td class="prio"><span class="badge must">MUST</span></td>
+  <td style="text-align:center">2〜3h</td>
+  <td style="text-align:center"><span class="badge wait">未</span></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td><div class="bar bar-win" style="width:90%"></div></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+
+<!-- セクション：オプション -->
+<tr>
+  <td class="task-name section" colspan="16">■ OPTION（クライアント確認後）</td>
+</tr>
+<tr>
+  <td class="task-name">A-10: UTF-8対応<br><small style="color:#888">T-3でUTF-8確認時のみ</small></td>
+  <td class="owner">Mac</td>
+  <td class="prio"><span class="badge opt">OPT</span></td>
+  <td style="text-align:center">1h</td>
+  <td style="text-align:center"><span class="badge wait">条件付</span></td>
+  <td></td><td></td><td></td>
+  <td><div class="bar bar-opt" style="width:60%"></div></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+<tr>
+  <td class="task-name">O-1: 一括実行ボタン追加<br><small style="color:#888">4〜13番マクロを順番に自動実行</small></td>
+  <td class="owner">Win</td>
+  <td class="prio"><span class="badge opt">OPT</span></td>
+  <td style="text-align:center">30分</td>
+  <td style="text-align:center"><span class="badge wait">要確認</span></td>
+  <td></td><td></td><td></td><td></td>
+  <td><div class="bar bar-opt" style="width:80%"></div></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+
+<!-- セクション：納品 -->
+<tr>
+  <td class="task-name section" colspan="16">■ DELIVERY</td>
+</tr>
+<tr>
+  <td class="task-name">打ち合わせ準備・デモ練習</td>
+  <td class="owner">両方</td>
+  <td class="prio"><span class="badge must">MUST</span></td>
+  <td style="text-align:center">1〜2h</td>
+  <td style="text-align:center"><span class="badge wait">未</span></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td>
+  <td><div class="bar bar-win" style="width:80%"></div></td>
+  <td></td><td></td><td></td><td></td>
+</tr>
+<tr>
+  <td class="task-name">納品物パッケージング・最終チェック</td>
+  <td class="owner">Mac</td>
+  <td class="prio"><span class="badge must">MUST</span></td>
+  <td style="text-align:center">1h</td>
+  <td style="text-align:center"><span class="badge wait">未</span></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+  <td><div class="bar bar-win" style="width:80%"></div></td>
+  <td></td>
+</tr>
+<tr>
+  <td class="task-name" style="background:#fce4d6;font-weight:bold;color:#c00">🎯 納品</td>
+  <td class="owner">—</td>
+  <td class="prio"></td>
+  <td style="text-align:center">—</td>
+  <td style="text-align:center"><span class="badge must">期限</span></td>
+  <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+  <td style="background:#c00;opacity:.4"></td>
+</tr>
+
+</tbody>
+</table>
+
+<!-- コスト表 -->
+<h2>💰 費用・工数まとめ</h2>
+<table class="cost-table">
+<thead>
+<tr>
+  <th>フェーズ</th>
+  <th>内容</th>
+  <th>状態</th>
+  <th>想定工数</th>
+  <th>備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>フェーズ1（解析）</td>
+  <td>既存マクロ全解析・構造把握・ドキュメント化</td>
+  <td><span class="badge done">完了</span></td>
+  <td>〜20時間</td>
+  <td>当初3〜4週間の見積もり → AI活用で大幅短縮</td>
+</tr>
+<tr>
+  <td>フェーズ2（実装）</td>
+  <td>VBAマクロ307行・デモUI1260行</td>
+  <td><span class="badge done">完了</span></td>
+  <td>〜15時間</td>
+  <td>当初1週間の見積もり → AI活用で短縮</td>
+</tr>
+<tr>
+  <td>フェーズ3（テスト）</td>
+  <td>Windows実機テスト・修正・操作マニュアル</td>
+  <td><span class="badge doing">進行中</span></td>
+  <td>5〜8時間</td>
+  <td>4/18〜22で実施予定</td>
+</tr>
+<tr class="total-row">
+  <td colspan="2"><strong>合計（見積もり）</strong></td>
+  <td></td>
+  <td><strong>40〜50時間</strong></td>
+  <td><strong>50万円〜（税別）</strong></td>
+</tr>
+</tbody>
+</table>
+
+<div style="margin-top:8px;font-size:10px;color:#888;">
+※ 要件定義書の見積もり：50〜80万円（税別）。現状の実装量・工数から50万円台が妥当。<br>
+※ オプション O-1（一括実行ボタン）追加の場合、+3〜5万円程度の追加作業。
+</div>
+
+<!-- リスク表 -->
+<h2>⚠️ リスク管理</h2>
+<table class="risk-table">
+<thead>
+<tr>
+  <th>リスク</th>
+  <th>発生確率</th>
+  <th>影響度</th>
+  <th>対応策</th>
+  <th>対応期限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>シートインデックス(1)(4)(6)が違う</td>
+  <td class="mid">中</td>
+  <td class="high">高（VBA動かない）</td>
+  <td>T-1で確認 → 定数修正（30分作業）</td>
+  <td>4/18</td>
+</tr>
+<tr>
+  <td>CSV文字コードがUTF-8</td>
+  <td>低</td>
+  <td class="mid">中（文字化け）</td>
+  <td>T-3→A-10対応（1時間作業）</td>
+  <td>4/19〜20</td>
+</tr>
+<tr>
+  <td>テストで予期せぬバグ発生</td>
+  <td class="mid">中</td>
+  <td class="mid">中</td>
+  <td>4/20バッファ日で修正</td>
+  <td>4/20</td>
+</tr>
+<tr>
+  <td>打ち合わせ日程が前倒し</td>
+  <td>低</td>
+  <td>低（デモUIは常に動く）</td>
+  <td>demo/index.htmlを常に動作可能状態に維持</td>
+  <td>随時</td>
+</tr>
+</tbody>
+</table>
+
+<div style="margin-top:24px;border-top:1px solid #eee;padding-top:12px;font-size:10px;color:#aaa;text-align:center;">
+黒永様案件 ガントチャート ／ 作成：2026-04-17 ／ 印刷はCtrl+P → PDFで保存
+</div>
+
+</div>
+</body>
+</html>

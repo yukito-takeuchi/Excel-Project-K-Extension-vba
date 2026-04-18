@@ -1238,6 +1238,15 @@ function resetDemo(){
    'prog-1c-wrap','prog-1d-wrap','prog-1e-wrap','prog-1f-wrap','prog-1g-wrap'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.style.display='none';
   });
+  // プログレスバーの幅とテキストをリセット（再実行時に前回状態が残るバグ対策）
+  ['prog1-fill','prog2-fill','prog3-fill',
+   'prog-1c-fill','prog-1d-fill','prog-1e-fill','prog-1f-fill','prog-1g-fill','prog-fill'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.style.width='0%';
+  });
+  ['prog1-txt','prog2-txt','prog3-txt',
+   'prog-1c-txt','prog-1d-txt','prog-1e-txt','prog-1f-txt','prog-1g-txt','prog-txt'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.textContent='処理中...';
+  });
   document.getElementById('prog-wrap').style.display='none';
   document.getElementById('btn-run').disabled=false;
   goSheet('0');
